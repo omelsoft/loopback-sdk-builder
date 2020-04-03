@@ -71,7 +71,9 @@ export class SocketConnection {
    **/
   public connect(token: AccessToken = null): void {
     if (!this.socket) {
-      console.info('Creating a new connection with: ', LoopBackConfig.getPath());
+      if (LoopBackConfig.debuggable()) {
+        console.info('Creating a new connection with: ', LoopBackConfig.getPath());
+      }
       // Create new socket connection
       this.socket = this.driver.connect(LoopBackConfig.getPath(), {
         log: false,
@@ -83,7 +85,7 @@ export class SocketConnection {
       // Listen for connection
       this.on('connect', () => {
         this.subjects.onConnect.next('connected');
-        // Authenticate or start heartbeat now    
+        // Authenticate or start heartbeat now
         this.emit('authentication', token);
       });
       // Listen for authentication
